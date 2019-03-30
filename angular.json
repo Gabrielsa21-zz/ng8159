@@ -7,8 +7,15 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "app",
-      "schematics": {},
+      "prefix": "",
+      "schematics": {
+        "@schematics/angular:component": {
+          "prefix": "cmail",
+          "inlineStyle": true,
+          "skipImport": true,
+          "spec": false
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
