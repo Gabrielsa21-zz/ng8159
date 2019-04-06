@@ -1,8 +1,7 @@
 <div class="cmailInputForm">
-  <div class="mdl-textfield mdl-textfield--floating-label">
-    <input required type="text" [name]="idCampo" [id]="idCampo" placeholder=" " class="mdl-textfield__input">
-    <span class="mdl-textfield__error">Informar um {{idCampo}} é obrigatório!</span>
-    <label class="mdl-textfield__label" [for]="idCampo">{{idCampo}}: </label>
+  <div class="mdl-textfield mdl-textfield--floating-label" [ngClass]="{'is-invalid': controle.invalid && controle.touched }">
+    <ng-content></ng-content>
+    <label class="mdl-textfield__label" [for]="idCampo">{{idCampo}}</label>
     <span class="mdl-textfield__formline"></span>
   </div>
 </div>

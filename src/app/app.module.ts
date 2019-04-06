@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -9,6 +9,8 @@ import { LoginComponent } from './modules/login/login.component';
 import { CadastroComponent } from './modules/cadastro/cadastro.component';
 import { ModuloRoteamento } from './app.routes';
 import { FormGroupComponent } from './components/form-group/form-group.component';
+import { FormFieldDirective } from './components/form-group/form-field.directive';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -17,12 +19,15 @@ import { FormGroupComponent } from './components/form-group/form-group.component
     CaixaDeEntradaComponent,
     LoginComponent,
     CadastroComponent,
-    FormGroupComponent
+    FormGroupComponent,
+    FormFieldDirective
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    ModuloRoteamento
+    ModuloRoteamento,
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
