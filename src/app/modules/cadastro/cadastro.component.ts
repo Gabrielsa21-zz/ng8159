@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { map } from "rxjs/operators";
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { map, catchError } from "rxjs/operators";
+import { User } from 'src/app/models/dto/input/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cadastro',
@@ -16,31 +18,29 @@ export class CadastroComponent implements OnInit {
     senha: new FormControl('', Validators.required),
     avatar: new FormControl('',Validators.required, this.validaImagem.bind(this)),
     telefone: new FormControl('',[Validators.required, Validators.pattern('[0-9]{4}-?[0-9]{4}[0-9]?')])
+
   });
 
-  constructor(private ajax: HttpClient) { }
+  constructor(private ajax: HttpClient
+              ,private roteador: Router) { }
 
   ngOnInit() {}
 
   validaImagem(controleAvatar: FormControl){
 
-    console.log(controleAvatar.value);
-    console.log(this);
-    
-
-    //requisicao assincrona via JS, estou fazendo um AJAX - Assyncronous Javascript and XML
-
-    this.ajax.head(controleAvatar.value)
-        .pipe(
-          map(
-            (retorno) =>{
-              console.log(retorno)
-            }
-          )
-        )
-    
-
-    return new Promise(resolve => resolve())
+    return this.ajax
+                .head(controleAvatar.value, {observe: 'response'})
+                .pipe(
+                  map((resposta)=> {
+                    console.log(resposta.ok);
+                    return resposta.ok
+                  })
+                  ,catchError((erro: HttpErrorResponse) => {
+                    console.warn(erro)
+                    return [{urlInvalida: true}]
+                  })
+                )
+              
   }
 
   validaTodosOsCampos(form: FormGroup){
@@ -59,7 +59,23 @@ export class CadastroComponent implements OnInit {
      return
     }
 
-    console.log(this.formCadastro.value);
+    const user = new User(this.formCadastro.value);
+    
+    console.log(user);
+    
+    this.ajax
+        .post(
+          'http://localhost:3200/users',
+          user
+          )
+        .subscribe(
+          (resposta) => {
+            console.log(resposta);
+            this.roteador.navigate(['login'])
+          }
+          , erro => console.error(erro)
+        )
+
     this.formCadastro.reset();
     
   }
