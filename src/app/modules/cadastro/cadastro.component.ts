@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError } from "rxjs/operators";
 import { User } from 'src/app/models/dto/input/user';
 import { Router } from '@angular/router';
+import { PageDataService } from 'src/app/services/page-data.service';
 
 @Component({
   selector: 'app-cadastro',
@@ -22,9 +23,12 @@ export class CadastroComponent implements OnInit {
   });
 
   constructor(private ajax: HttpClient
-              ,private roteador: Router) { }
+              ,private roteador: Router
+              , private pageService: PageDataService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.pageService.defineTitulo('Cadastro');
+  }
 
   validaImagem(controleAvatar: FormControl){
 

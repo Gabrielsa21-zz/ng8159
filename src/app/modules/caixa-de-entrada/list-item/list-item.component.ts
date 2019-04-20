@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Email } from "../../../models/email";
 
 @Component({
@@ -9,10 +9,14 @@ import { Email } from "../../../models/email";
 export class ListItemComponent implements OnInit {
 
   @Input() email: Email;
+  @Output() remover = new EventEmitter();
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  removeItem(){
+    this.remover.emit({emailId: this.email.id})
   }
 
 }

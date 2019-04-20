@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
+import { PageDataService } from 'src/app/services/page-data.service';
 
 @Component({
   selector: 'app-login',
@@ -18,9 +19,11 @@ export class LoginComponent implements OnInit {
   mensagemErro = ''
 
   constructor(private servico: LoginService
-              ,private roteador: Router) { }
+              ,private roteador: Router
+              ,private pageService: PageDataService) { }
 
   ngOnInit() {
+    this.pageService.defineTitulo('Login');
   }
 
   handleLogin(formLogin: NgForm){

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Email } from 'src/app/models/email';
 import { EmailService } from 'src/app/services/email.service';
+import { PageDataService } from 'src/app/services/page-data.service';
 
 @Component({
   selector: 'cmail-caixa-de-entrada',
@@ -23,24 +24,27 @@ export class CaixaDeEntradaComponent implements OnInit {
     assunto: '',
     conteudo: '',
     destinatario: '',
-    dataEnvio: ''
+    dataEnvio: '',
+    id: ''
   };
   
   emailList:Email[] = [];
-
+  termoFiltro = '';
   private _isNewEmailOpen = false;
 
-  constructor(private servico: EmailService) { }
+  constructor(private servico: EmailService
+              ,private pageService: PageDataService) { }
 
   ngOnInit() {
     this.servico
         .carregar()
         .subscribe(
-          listaEmailsApi => {
-            console.log(listaEmailsApi);
-            this.emailList = listaEmailsApi;
-          }
+          listaEmailsApi => this.emailList = listaEmailsApi.reverse()
+          , erro => console.log(erro)
         )
+
+      this.pageService.defineTitulo('Caixa de entrada');
+      
   }
 
   get isNewEmailOpen(){
@@ -61,12 +65,40 @@ export class CaixaDeEntradaComponent implements OnInit {
         .enviar(novoEmail)
         .subscribe(
           (email) => {
-            this.emailList.push(email)
+            this.emailList.unshift(email);
             formMail.resetForm();
             this.toggleNewEmailForm();
           }
           , erro => console.log(erro)
         )
+  }
+
+  handleRemoverEmail({emailId}){
+    this.servico
+        .deletar(emailId)
+        .subscribe(
+          () => {
+            this.emailList = this
+                            .emailList
+                            .filter( email => email.id != emailId)
+          }
+        )
+  }
+
+  handleFiltro(termoDeFiltro: string){
+    this.termoFiltro = termoDeFiltro;
+  }
+
+  listaEmailsFiltrada(){
+    return this.emailList.filter((email) => {
+      if (
+        email.assunto.toLowerCase().includes(this.termoFiltro.toLowerCase())
+        || email.destinatario.toLowerCase().includes(this.termoFiltro.toLowerCase())
+        || email.conteudo.toLowerCase().includes(this.termoFiltro.toLowerCase()) 
+      ) {
+        return email
+      }
+    })
   }
 
 }

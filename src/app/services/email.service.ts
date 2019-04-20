@@ -22,47 +22,36 @@ export class EmailService {
     }
 
     return this.http
-      .post(this.url, emailDto, { headers: this.cabecalho })
+      .post<any>(this.url, emailDto, { headers: this.cabecalho })
       .pipe(
-        map(
-          (emailApi: any) => {
-
-            const emailApiDto = {
-              destinatario: emailApi.to,
-              assunto: emailApi.subject,
-              conteudo: emailApi.content,
-              dataEnvio: emailApi.created_at
-            }
-
-            return new Email(emailApiDto);
-          }
-        )
+        map(emailApi => this.criaDTO(emailApi))
       )
 
   }
 
   carregar(): Observable<Email[]> {
     return this.http
-      .get(this.url, { headers: this.cabecalho })
+      .get<any[]>(this.url, { headers: this.cabecalho })
       .pipe(
         map(
-          (listaEmailsApi: any[]) => {
-
-            return listaEmailsApi.map(
-              (emailApi) => {
-                const emailApiDto = {
-                  destinatario: emailApi.to,
-                  assunto: emailApi.subject,
-                  conteudo: emailApi.content,
-                  dataEnvio: emailApi.created_at
-                }
-
-                return new Email(emailApiDto);
-              }
-            )
-          }
+          listaEmailsApi => 
+            listaEmailsApi.map(emailApi => this.criaDTO(emailApi))
         )
       )
+  }
+
+  criaDTO(emailIngles): Email {
+    return new Email({
+      destinatario: emailIngles.to,
+      assunto: emailIngles.subject,
+      conteudo: emailIngles.content,
+      dataEnvio: emailIngles.created_at,
+      id: emailIngles.id
+    }) 
+  }
+
+  deletar(emailId): Observable<Object> {
+    return this.http.delete(`${this.url}/${emailId}`,{headers: this.cabecalho})
   }
 
 }
