@@ -8,7 +8,7 @@ import { FormControl } from '@angular/forms';
 })
 export class FormGroupComponent implements OnInit {
 
-  private idCampo = '';
+  idCampo = '';
   @Input() controle: FormControl;
  
   //DI - Dependency Injection

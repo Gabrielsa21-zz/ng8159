@@ -12,4 +12,8 @@ export class HeaderComponent {
     toggleMenu(){
         this.isMenuOpen = !this.isMenuOpen;
     }
+
+    logout(){
+        localStorage.removeItem('cmail-token');
+    }
 }

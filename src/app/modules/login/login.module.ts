@@ -5,7 +5,7 @@ import { LoginRoutingModule } from './login-routing.module';
 import { SharedComponentsModule } from 'src/app/components/shared-components.module';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { LoginService } from './login.service';
+import { LoginService } from '../../services/login.service';
 
 @NgModule({
   declarations: [
