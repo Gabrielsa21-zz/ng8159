@@ -35,21 +35,20 @@ export class CadastroComponent implements OnInit {
     return this.ajax
                 .head(controleAvatar.value, {observe: 'response'})
                 .pipe(
-                  map((resposta)=> {
+                  map((resposta) => {
                     console.log(resposta.ok);
-                    return resposta.ok
+                    return resposta.ok;
                   })
                   ,catchError((erro: HttpErrorResponse) => {
-                    console.warn(erro)
-                    return [{urlInvalida: true}]
+                    console.warn(erro);
+                    return [{urlInvalida: true}];
                   })
-                )
-              
+                );
   }
 
   validaTodosOsCampos(form: FormGroup){
     let controles = form.controls;
-  
+
     for(let controle in controles){
       let campo = form.get(controle)
       campo.markAsTouched()
@@ -57,16 +56,16 @@ export class CadastroComponent implements OnInit {
   }
 
   handleCadastrarUsuario(){
-    
+
     if(this.formCadastro.invalid){
-     this.validaTodosOsCampos(this.formCadastro) 
+     this.validaTodosOsCampos(this.formCadastro)
      return
     }
 
     const user = new User(this.formCadastro.value);
-    
+
     console.log(user);
-    
+
     this.ajax
         .post(
           'http://localhost:3200/users',
@@ -81,7 +80,7 @@ export class CadastroComponent implements OnInit {
         )
 
     this.formCadastro.reset();
-    
+
   }
 
 }
